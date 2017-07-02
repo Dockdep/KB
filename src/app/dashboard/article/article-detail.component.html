@@ -1,0 +1,55 @@
+﻿<div *ngIf="modelForm" class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="red">
+                <h4 class="title">Edit Article</h4>
+            </div>
+            <div class="card-content">
+              <form [formGroup]="modelForm" (ngSubmit)="onSubmit()">
+
+                <div class="row">
+                  <div class="col-md-6">
+
+
+                      <div class="form-group form-black label-floating">
+                        <label class="control-label">Title</label>
+
+                        <input formControlName="title" type="text" class="form-control">
+
+                      </div>
+                      <div *ngIf="formErrors.title" class="alert alert-danger">
+                        {{ formErrors.title }}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div *ngIf="tags" class="form-group form-black label-floating">
+                        <label class="control-label">Tags</label>
+                        <select2 [data]="tags"
+                                 [options]="options"
+                                 [width]="500"
+                                 [value]="modelForm.value.tagsId"
+                                 (valueChanged)="changed($event)"></select2>
+
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="control-label">content</label>
+
+                    <textarea formControlName="content" class="form-control" rows="5"></textarea>
+                  </div>
+                </div>
+
+
+
+                <p class="btn btn-danger pull-right" (click)="goBack()">Back</p>
+                <button type="submit" class="btn btn-success pull-right" [disabled]="!modelForm.valid">Submit</button>
+
+
+                <div class="clearfix"></div>
+              </form>        
+            </div>
+        </div>
+    </div>
+</div>

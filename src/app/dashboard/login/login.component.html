@@ -1,0 +1,5 @@
+﻿<h2>Select you subscriber</h2>
+<div *ngIf="subscribers">
+  <select2 [data]="subscribers" [value]="0" [width]="300" [options]="options" (valueChanged)="changed($event)"></select2>
+  <button type="submit" (click)="login()" class="btn btn-success pull-right">Login</button>
+</div>

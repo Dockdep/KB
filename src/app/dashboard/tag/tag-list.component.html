@@ -1,0 +1,45 @@
+﻿<h2> Tag </h2>
+<p>
+  <a [routerLink]="['Add']" class="btn btn-primary"> Add</a>
+</p>
+
+
+<!--issue : Not variables properly used as per standard like i should put Yes/No buttons
+ in modalpopup component and that component should return me yes/no as output-->
+<modal-popup [(visible)]="showDialog" title="Confirm">
+  Are you Sure?
+  <hr>
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="confirmDelete()">Yes</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="showDialog = false">No</button>
+
+</modal-popup>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>Parent Tag</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of model">
+      <td>{{item.id}}</td>
+      <td>{{item.name}}</td>
+      <td>{{item.parentId}}</td>
+      <td>
+        <a [routerLink]="['Edit', {id:item.id}]">
+
+          <i class="glyphicon glyphicon-edit"></i>
+        </a>
+      </td>
+      <td>
+        <!--<i (click)="deleteMaterial(material)" class="glyphicon glyphicon-remove"></i>-->
+        <!--assign material to object used for delete and "showDialog" to true which emits visible of Modal popup-->
+        <i (click)="showDialog=true; objDelete=item"
+           class="glyphicon glyphicon-remove" style="cursor:pointer"></i>
+      </td>
+    </tr>
+  </tbody>

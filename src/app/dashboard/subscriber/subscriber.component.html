@@ -1,0 +1,18 @@
+﻿<div *ngIf="model" class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="red">
+                <h4 class="title">Subscriber</h4>
+            </div>
+            <div class="card-content">
+              <div>
+                <p>Name: {{model.name}}</p>
+              </div>
+              <div>
+                <p>Nickname: {{model.nickname}}</p>
+              </div>
+              <button type="submit" (click)="logout()" class="btn btn-success pull-right">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>

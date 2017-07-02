@@ -1,0 +1,45 @@
+﻿<div *ngIf="modelForm" class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" data-background-color="red">
+                <h4 class="title">Edit Tag</h4>
+            </div>
+            <div class="card-content">
+                <form [formGroup]="modelForm" (ngSubmit)="onSubmit()">
+           
+                    <div class="row">
+                        <div class="col-md-6">
+              
+                  
+                            <div class="form-group form-black label-floating">
+                                <label class="control-label">Name</label>
+
+                                <input formControlName="name" type="text" class="form-control" >
+                            
+                            </div>
+                            <div *ngIf="formErrors.name" class="alert alert-danger">
+                                {{ formErrors.name }}
+                            </div>
+               
+                          <div *ngIf="tags" class="form-group form-black label-floating">
+                            <label class="control-label">Parent Tag</label>
+
+                            <select2 [value]="modelForm.value.parentId" (valueChanged)="changed($event)" [data]="tags"></select2>
+
+                          </div>
+          
+
+                        </div>
+                    </div>
+     
+  
+                    <p class="btn btn-danger pull-right" (click)="goBack()">Back</p>
+                    <button type="submit" class="btn btn-success pull-right" [disabled]="!modelForm.valid">Submit</button>
+
+
+                    <div class="clearfix"></div>
+                </form>        
+            </div>
+        </div>
+    </div>
+</div>
