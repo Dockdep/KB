@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
-using DocumentDBGettingStarted.Model;
+using DocumentDBGettingStarted.Models;
 using Microsoft.Azure.Documents;
 using System.Linq.Expressions;
 
@@ -82,6 +82,11 @@ namespace DocumentDBGettingStarted.Repository
                 throw new Exception(e.Message);
             }
 
+        }
+
+        public async Task<IEnumerable<Article>> GetAllListWhere()
+        {
+          return await GetAllListWhere((s) => true);
         }
 
         public async Task<IEnumerable<Article>> GetAllListWhere(Expression<Func<Article, bool>> predicate)

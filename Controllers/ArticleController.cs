@@ -4,96 +4,98 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using DocumentDBGettingStarted.Model;
+using DocumentDBGettingStarted.Models;
+using DocumentDBGettingStarted.Services;
 using DocumentDBGettingStarted.Repository;
 
 namespace DocumentDBGettingStarted.Controllers
 {
 
-    public class ArticleController : Controller
+  public class ArticleController : Controller
+  {
+    private IRepository<Article, string> db;
+    private IContentService dbService;
+    private string user;
+    public ArticleController()
     {
-        private IRepository<Article, string> db;
-        public ArticleController()
-        {
-            db = new ArticleDocumentDBRepository();
-        }
-
-        // GET: Subscriber
-        public ActionResult Index()
-        {
-            try
-            {
-                var user = HttpContext.Session.GetString("user");
-                return Json(db.GetAllListWhere(a=>a.SubscriberId == user).Result);
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message);
-            }
-        }
-
-        // GET: Subscriber/Details/5
-        public ActionResult Details(string id)
-        {
-            try
-            {
-                return Json(db.Details(id).Result);
-
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message);
-            }
-        }
-
-        // POST: Subscriber/Create
-        [HttpPost]
-        public ActionResult Create([FromBody] Article collection)
-        {
-            try
-            {
-                collection.DateCreated = DateTime.Now.ToString("hh:mm:ss dd.MM.yyyy");
-                db.Create(collection);
-                return Ok();
-
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message);
-            }
-        }
-
-        // POST: Subscriber/Edit/5
-        [HttpPost]
-        public ActionResult Edit(string id, [FromBody]  Article collection)
-        {
-            try
-            {
-                collection.DateUpdated = DateTime.Now.ToString("hh:mm:ss dd.MM.yyyy");
-                db.Update(id, collection);
-                return Ok();
-
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message);
-            }
-        }
-
-        // POST: Subscriber/Delete/5
-        [HttpPost]
-        public ActionResult Delete(string id)
-        {
-            try
-            {
-                db.Delete(id);
-                return Ok();
-
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message);
-            }
-        }
+      db = new ArticleDocumentDBRepository();
+      dbService = new ContentService();
+      user = HttpContext.Session.GetString("user");
     }
+
+    // GET: Subscriber
+    public ActionResult Index()
+    {
+      try
+      {
+        return Json(db.GetAllListWhere(a=>a.SubscriberId == user).Result);
+      }
+      catch (Exception e)
+      {
+        return Json(e.Message);
+      }
+    }
+
+    // GET: Subscriber/Details/5
+    public ActionResult Details(string id)
+    {
+      try
+      {
+        return Json(db.Details(id).Result);
+
+      }
+      catch (Exception e)
+      {
+        return Json(e.Message);
+      }
+    }
+
+    // POST: Subscriber/Create
+    [HttpPost]
+    public ActionResult Create([FromBody] Article collection)
+    {
+      try
+      {
+        dbService.AddArticle(collection, user);
+        return Ok();
+
+      }
+      catch (Exception e)
+      {
+        return Json(e.Message);
+      }
+    }
+
+    // POST: Subscriber/Edit/5
+    [HttpPost]
+    public ActionResult Edit(string id, [FromBody]  Article collection)
+    {
+      try
+      {
+        dbService.UpdateArticle(collection, user);
+        return Ok();
+
+      }
+      catch (Exception e)
+      {
+        return Json(e.Message);
+      }
+    }
+
+    // POST: Subscriber/Delete/5
+    [HttpPost]
+    public ActionResult Delete(string id)
+    {
+      try
+      {
+        dbService.DeleteArticle(id, user);
+        return Ok();
+
+      }
+      catch (Exception e)
+      {
+          return Json(e.Message);
+      }
+    }
+  }
 }

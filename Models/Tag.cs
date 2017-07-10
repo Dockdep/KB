@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DocumentDBGettingStarted.Model
+namespace DocumentDBGettingStarted.Models
 {
     public partial class Tag
     {

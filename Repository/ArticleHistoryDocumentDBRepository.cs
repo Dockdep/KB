@@ -10,15 +10,15 @@ using System.Linq.Expressions;
 
 namespace DocumentDBGettingStarted.Repository
 {
-  public class SubscriberDocumentDBRepository : IRepository<Subscriber,string>
+  public class ArticleHistoryDocumentDBRepository : IRepository<ArticleHistory,string>
   {
     private const string EndpointUri = "https://single-page-aplication.documents.azure.com:443/";
     private const string PrimaryKey = "Up4bHXTTlUGw7MkB1C1qCg8QX1zDxdzbfWtCZzpNbVfsJ7nU6ShaThFNQxTUUHFt04sya1pEaMsLDtAq0vNHig==";
     private static readonly string DatabaseId = "KnowledgeBase";
-    private static readonly string CollectionId = "Subscriber";
+    private static readonly string CollectionId = "ArticleHistory";
     private DocumentClient _client;
 
-    public SubscriberDocumentDBRepository()
+    public ArticleHistoryDocumentDBRepository()
     {
         _client = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
         CreateDatabaseIfNotExistsAsync().Wait();
@@ -67,12 +67,12 @@ namespace DocumentDBGettingStarted.Repository
         }
     }
 
-    public IEnumerable<Subscriber> GetAllList()
+    public IEnumerable<ArticleHistory> GetAllList()
     {
         try
         {
             FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
-            IQueryable<Subscriber> results = _client.CreateDocumentQuery<Subscriber>(
+            IQueryable<ArticleHistory> results = _client.CreateDocumentQuery<ArticleHistory>(
                     UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), queryOptions);
 
             return results.ToList();
@@ -85,34 +85,34 @@ namespace DocumentDBGettingStarted.Repository
 
     }
 
-    public async Task<IEnumerable<Subscriber>> GetAllListWhere()
+    public async Task<IEnumerable<ArticleHistory>> GetAllListWhere()
     {
       return await GetAllListWhere((s) => true);
     }
 
-    public async Task<IEnumerable<Subscriber>> GetAllListWhere(Expression<Func<Subscriber, bool>> predicate)
+    public async Task<IEnumerable<ArticleHistory>> GetAllListWhere(Expression<Func<ArticleHistory, bool>> predicate)
     {
-      IDocumentQuery<Subscriber> query = _client.CreateDocumentQuery<Subscriber>(
+      IDocumentQuery<ArticleHistory> query = _client.CreateDocumentQuery<ArticleHistory>(
           UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId))
           .Where(predicate)
           .AsDocumentQuery();
 
-      List<Subscriber> results = new List<Subscriber>();
+      List<ArticleHistory> results = new List<ArticleHistory>();
       while (query.HasMoreResults)
       {
-        results.AddRange(await query.ExecuteNextAsync<Subscriber>());
+        results.AddRange(await query.ExecuteNextAsync<ArticleHistory>());
       }
 
       return results;
     }
 
-    public async Task<Subscriber> Details(string id)
+    public async Task<ArticleHistory> Details(string id)
     {
         try
         {
             var result = await _client.ReadDocumentAsync
             (UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id));
-            return (Subscriber)(dynamic)result.Resource;
+            return (ArticleHistory)(dynamic)result.Resource;
         }
         catch (Exception e)
         {
@@ -120,26 +120,20 @@ namespace DocumentDBGettingStarted.Repository
         }
     }
 
-    public void Create(Subscriber data)
+    public void Create(ArticleHistory data)
     {
-      try
-      {
-        var checkUser = GetAllListWhere(f => f.Nickname == data.Nickname).Result.SingleOrDefault();
-        if(checkUser != null)
+        try
         {
-          throw new Exception(String.Format("User with nickname {0} already exist", data.Nickname));
-        }      
-              
-        _client.CreateDocumentAsync
-          (UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), data);
-      }
-      catch (Exception e)
-      {
-          throw new Exception(e.Message);
-      }
+              _client.CreateDocumentAsync
+                (UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), data);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    public void Update(string Id, Subscriber data)
+    public void Update(string Id, ArticleHistory data)
     {
         _client.ReplaceDocumentAsync
             (UriFactory.CreateDocumentUri(DatabaseId, CollectionId, Id), data);

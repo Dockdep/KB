@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using DocumentDBGettingStarted.Model;
+using DocumentDBGettingStarted.Models;
 using DocumentDBGettingStarted.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using MongoDB.Bson;
+
 public class GeneratorMiddleware
 {
   private readonly RequestDelegate _next;
-  private SubscriberDocumentDBRepository db;
-  private TagDocumentDBRepository dbTag;
-  private ArticleDocumentDBRepository dbArticle;
+  private IRepository<Subscriber, string> db;
+  private IRepository<Tag, string> dbTag;
+  private IRepository<Article, string> dbArticle;
   private List<string> tagsId = new List<string>();
   public GeneratorMiddleware(RequestDelegate next)
   {

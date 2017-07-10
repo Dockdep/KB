@@ -1,14 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
-namespace DocumentDBGettingStarted.Model
+namespace DocumentDBGettingStarted.Models
 {
-    public partial class Subscriber
-    {
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-        [JsonProperty(PropertyName = "nickname")]
-        public string Nickname { get; set; }
-    }
+  public partial class Subscriber
+  {
+    [JsonProperty(PropertyName = "id")]
+    public string Id { get; set; }
+    [BsonElement("name")]
+    [JsonProperty(PropertyName = "name")]
+    public string Name { get; set; }
+    [BsonElement("nickname")]
+    [JsonProperty(PropertyName = "nickname")]
+    public string Nickname { get; set; }
+  }
 }
